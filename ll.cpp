@@ -1,162 +1,138 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
-int i;
-//Create a class of Node.................
-class Node{
-       public:
-      
-       int value;
-        Node*next;
-    //Constructor..............
-    Node(int newvalue){
-       value = newvalue;
-        next = NULL;
+//Creating class of Node............
 
-          }
+class Node {
+    public:
+    int value;
+    Node * next; 
+    // constructor
+    Node(int newvalue)
+    {value = newvalue;
+    next = NULL;}
 };
+//Create class of linkedlist..............
 
-
-//Creating class of linkedlist...............
 class linkedlist{
+    public:
+    Node * head;
+//Constructor...........
+    linkedlist(){
+        head = NULL;
+    }
+    //insert function for the linkedlist.............
+    
+    void insert(int newvalue){
+        Node * temp = new Node(newvalue);
+        temp->next = head;
+        head = temp;
+    }
 
-public:
-Node * head;
+//Display function for  the linkedlist.............
 
-//constructor................
-linkedlist(){
-head = NULL;
-}
-//Insert function...................
-void insert(int newvalue){
-Node * temp = new Node(newvalue);
-temp->next = head;
-head = temp;
-}
+    void display(){
+        Node * current = head;
+        while(current != NULL){
+            cout << current->value << "->";
+            current = current-> next;
+        }
+        cout << "NULL" << endl;
+    }
+//Conunt the numberofItems function in the linkedlsit.........
 
-//Delete function.................
-void delet(int value){
-Node * temp = head;
-Node * current= head;
+    int numberofItems(){
+        // start at head
+        Node * current =  head;
+        int count = 0;
+        while (current != NULL){
+            count++;
+            current = current->next;
+        }
+        return count;
+    }
+//Find the ppsition of pointer in the linkedlist.............
 
-current->next= NULL;
-head=temp;
+    Node * getPos(int pos){
+        int cnt = 0;
+        Node * current = head;
+        while(cnt < (pos-1)){
+            current = current->next; 
+            cnt++;
+        }
+        return current;
+    }
+//inserAt function for the linkedlist.................
 
-delete temp;
-}
+    void insertAt(int newvalue, int pos){
+        // Check validity of pos.
+        if(pos < 1 || (pos > (numberofItems()+1))){ 
+            cout << "Not a valid position" << endl;
+            return;
+        }
 
+        // Reach to pos-1
+        Node * current = getPos(pos-1);
+        
+        //Links update
+        if(pos==1) 
+            insert(newvalue);
+        else{
+            // Create a new node
+            Node *temp = new Node(newvalue);
+            temp -> next = current->next;
+            current -> next = temp;
+        }
+    }
+//Delete function for the linkedlist...........
 
-//Display function....................
- void display(){
-Node * current = head;
-while(current != NULL){
-cout<<current->value<<"->";
-current=current->next;
-}
-cout<<"NULL"<<endl;
-}
-//Count the number of items in the linked list........................
-int numberofItems(){
-//Start at head.............
-	Node * current = head;
-	int count =0;
-	while(current != NULL){
-	count++;
-	current = current->next;
-	}
-	return count;
+void delet(){ 
+             Node*temp = head;
+             head = head-> next;
+             delete temp;
+             }
+//DeleteAt fucntion for  the linkedlist.............
 
-}
-//Get the position function to reach a particular node.............
-		Node * getPos(int pos){
-		int cnt = 0;
-		Node * current = head;
-		while(cnt , ( pos-1)){
-		current=current->next;
-		cnt++;
-		}
-		return current;
-
-
-
-}
-
-
-//InsertAt function......................
-
-void insertAt(int newvalue, int pos){
-
-			//check validity of position................
-			if(pos<1 || (pos> (
-			numberofItems()+1))){
-			cout<<"Not a valid position......"<<endl;
-			return;
-			}
-
-
-			//reach to pos-1................
-			Node * current= getPos(pos-1);
-
-
-			//link update..........
-			if (pos==1)
-			insert(newvalue);
-
-
-
-			else{
-			//create a new node.............
-			Node * temp = new Node(newvalue);
-			temp->next=current->next;
-			current->next=temp;
-			    }
-}
-
-
-
-
+void deleteAt(int pos){ 
+                      Node* current  = head;
+                      Node* temp = head;
+                      if (pos>=1&&pos<=numberofItems())
+                      { if ( pos == 1){ delet();}
+                        else{ int c= 1;
+                              while(c!= (pos-1)){
+                                                 current = current -> next;
+                                                 c++;
+                                                 }
+                                                 temp = current -> next ;
+                                                 current -> next = (current -> next )-> next ;
+                                                 delete temp;
+                              }
+                       } 
+}  
 
 };
-
-
-
-
-
-
-
-
-
-
 
 int main(){
- linkedlist l1;
- for(i=10;i>0;i--){
+    linkedlist l1;
+    for(int i = 4 ; i > 0 ; i--){
+        l1.insert(i);
+    }
+    cout<<"1). The given linkedlist is: ";
+    l1.display();
+    cout << "2). NumberofItems in the given linkedlist is  : " << l1.numberofItems() << endl;
 
-
-l1.insert(i);
-}
-cout<<" The order of the  linkedlist is:  ";
-l1.display();
-cout<<"The number of items in the linkedlist is :" << l1.numberofItems()<<endl;
-
-//insertAt(6,2);
-//insertAt(7,3);
-cout<<l1.getPos(9)->value<<endl;
-l1.insertAt(11,11);
-l1.display();
-l1.insertAt(10,1);
-l1.display();
-l1.delet(4);
-l1.display();
-
-
-
-
-
-
-
-
-
-
-
-return 0;
+    //l1.insertAt(11,1);
+    //l1.insertAt(10,2);
+    cout<<"3). The position of the pointer in the linkedlist is : ";
+    cout << l1.getPos(3)->value << endl;
+    cout<<"4). After insertion at 1st position of the given linkedlist is :";
+    l1.insertAt(11,1);
+    l1.display();
+    cout<<"5). Again after insertion at 2nd position of the given linkedlist is: ";
+    
+    l1.insertAt(10,2);
+    l1.display();
+    cout<<"6). After deletion at 1st postion of the given linkedlist is:";
+    l1.deleteAt(1);
+    l1.display();
+    
 }
